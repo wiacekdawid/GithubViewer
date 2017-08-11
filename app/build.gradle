@@ -22,6 +22,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -30,6 +34,7 @@ dependencies {
     compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
 
+    annotationProcessor "com.android.databinding:compiler:$rootProject.ext.databindingVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
 
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
