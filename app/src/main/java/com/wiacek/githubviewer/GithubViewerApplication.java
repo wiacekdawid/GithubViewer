@@ -1,5 +1,6 @@
 package com.wiacek.githubviewer;
 
+import android.content.Context;
 import android.support.multidex.*;
 
 import com.squareup.leakcanary.LeakCanary;
@@ -13,6 +14,8 @@ import com.wiacek.githubviewer.di.modules.AppModule;
 
 public class GithubViewerApplication extends MultiDexApplication {
 
+    private AppComponent appComponent;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -20,13 +23,21 @@ public class GithubViewerApplication extends MultiDexApplication {
         initializeLeakCanary();
     }
 
+    public static GithubViewerApplication getGithubViewerApplication(Context context) {
+        return (GithubViewerApplication) context.getApplicationContext();
+    }
+
     private void initializeDI() {
-        AppComponent appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
+        appComponent = DaggerAppComponent.builder().appModule(new AppModule(this)).build();
         appComponent.inject(this);
     }
     private void initializeLeakCanary() {
         if(LeakCanary.isInAnalyzerProcess(this) && BuildConfig.DEBUG) {
             LeakCanary.install(this);
         }
+    }
+
+    public AppComponent getAppComponent() {
+        return appComponent;
     }
 }

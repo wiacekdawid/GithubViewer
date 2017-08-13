@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -11,6 +12,10 @@ android {
         versionName "1.0"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     buildTypes {
         debug {
@@ -33,6 +38,14 @@ dependencies {
     compile "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
     compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
+    compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
+    compile ("com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofitRxJavaAdapterVersion") {
+        exclude group: 'io.reactivex', module: 'rxjava'
+    }
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion"
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
+    compile 'com.google.guava:guava:23.0-android'
 
     annotationProcessor "com.android.databinding:compiler:$rootProject.ext.databindingVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
@@ -44,6 +57,7 @@ dependencies {
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.google.code.findbugs'
     })
 }
 
