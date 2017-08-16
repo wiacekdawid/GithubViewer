@@ -7,16 +7,16 @@ import android.support.v7.app.AppCompatActivity;
 import com.wiacek.githubviewer.GithubViewerApplication;
 import com.wiacek.githubviewer.R;
 import com.wiacek.githubviewer.data.GithubReposRepository;
-import com.wiacek.githubviewer.data.model.GithubRepo;
 import com.wiacek.githubviewer.databinding.ActivityGithubListBinding;
 import com.wiacek.githubviewer.di.components.GithubListActivityComponent;
 import com.wiacek.githubviewer.di.modules.GithubListActivityModule;
+import com.wiacek.githubviewer.ui.base.ViewModel;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
+
 
 /**
  * Created by wiacek.dawid@gmail.com
@@ -28,12 +28,19 @@ public class GithubListActivity extends AppCompatActivity {
     @Inject
     protected GithubReposRepository githubReposRepository;
 
+    private static final String VIEW_MODEL_STATE = "viewModelState";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-         GithubListActivityComponent component = GithubViewerApplication
+        ViewModel.State state = null;
+        if(savedInstanceState != null) {
+            state = savedInstanceState.getParcelable(VIEW_MODEL_STATE);
+        }
+
+        GithubListActivityComponent component = GithubViewerApplication
                  .getGithubViewerApplication(this)
                  .getAppComponent()
-                 .add(new GithubListActivityModule(this));
+                 .add(new GithubListActivityModule(this, state));
 
         component.inject(this);
 
@@ -45,11 +52,6 @@ public class GithubListActivity extends AppCompatActivity {
         githubReposRepository.getGithubRepos("JakeWharton")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(githubRepos -> {
-                    for(GithubRepo repo : githubRepos) {
-                        githubListViewModel.setText(githubListViewModel.getText() + repo.name);
-                    }
-                },
-                        t -> Timber.e(t.getMessage()));
+                .subscribe();
     }
 }

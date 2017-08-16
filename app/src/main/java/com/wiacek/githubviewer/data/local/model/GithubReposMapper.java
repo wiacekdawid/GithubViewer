@@ -1,4 +1,4 @@
-package com.wiacek.githubviewer.data.model;
+package com.wiacek.githubviewer.data.local.model;
 
 import com.wiacek.githubviewer.api.model.GithubRepoDto;
 import com.wiacek.githubviewer.api.model.UserDto;

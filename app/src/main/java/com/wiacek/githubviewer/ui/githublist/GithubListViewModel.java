@@ -1,25 +1,34 @@
 package com.wiacek.githubviewer.ui.githublist;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
-import com.wiacek.githubviewer.BR;
+import com.wiacek.githubviewer.ui.base.RecyclerViewAdapter;
+import com.wiacek.githubviewer.ui.base.RecyclerViewViewModel;
 
 /**
  * Created by wiacek.dawid@gmail.com
  */
 
-public class GithubListViewModel extends BaseObservable {
+public class GithubListViewModel extends RecyclerViewViewModel {
 
-    private String text;
+    private GithubListAdapter githubListAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
-    @Bindable
-    public String getText() {
-        return text;
+    public GithubListViewModel(GithubListAdapter githubListAdapter, LinearLayoutManager linearLayoutManager, @Nullable State savedInstanceState) {
+        super(savedInstanceState);
+        this.githubListAdapter = githubListAdapter;
+        this.linearLayoutManager = linearLayoutManager;
+
+    }
+    @Override
+    protected RecyclerViewAdapter getAdapter() {
+        return githubListAdapter;
     }
 
-    public void setText(String text) {
-        this.text = text;
-        notifyPropertyChanged(BR.text);
+    @Override
+    protected RecyclerView.LayoutManager getLayoutManager() {
+        return linearLayoutManager;
     }
 }

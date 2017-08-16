@@ -2,13 +2,15 @@ package com.wiacek.githubviewer.data;
 
 import com.wiacek.githubviewer.api.GithubService;
 import com.wiacek.githubviewer.api.model.GithubRepoDto;
-import com.wiacek.githubviewer.data.model.GithubRepo;
-import com.wiacek.githubviewer.data.model.GithubReposMapper;
+import com.wiacek.githubviewer.data.local.model.GithubRepo;
+import com.wiacek.githubviewer.data.local.model.GithubReposMapper;
+import com.wiacek.githubviewer.data.local.util.GithubRepoDataHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.realm.Realm;
 import timber.log.Timber;
 
 /**
@@ -28,13 +30,13 @@ public class GithubReposRepository {
                 .map(
                         githubRepoDtos ->
                         {
-                            List<GithubRepo> list = new ArrayList<GithubRepo>(100);
+                            List<GithubRepo> list = new ArrayList<>(100);
                             for(GithubRepoDto githubRepoDto: githubRepoDtos) {
                                 list.add(GithubReposMapper.trasformGithubRepoDtoToGithubRepo(githubRepoDto));
                             }
                             return list;
                         }
                 )
-                .doOnSuccess(list -> Timber.i("Save list to databser"));
+                .doOnSuccess(list -> GithubRepoDataHelper.add(Realm.getDefaultInstance(), list).subscribe());
     }
 }

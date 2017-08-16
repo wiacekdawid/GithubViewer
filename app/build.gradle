@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -35,6 +36,8 @@ android {
 
 dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:cardview-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.jakewharton.timber:timber:$rootProject.ext.timberVersion"
     compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
     compile "com.google.dagger:dagger:$rootProject.ext.daggerVersion"
@@ -45,10 +48,14 @@ dependencies {
     }
     compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxAndroidVersion"
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
-    compile 'com.google.guava:guava:23.0-android'
-
+    compile "com.google.guava:guava:23.0-android"
+    compile "com.facebook.stetho:stetho:$rootProject.ext.stethoVersion"
+    compile "com.uphyca:stetho_realm:$rootProject.ext.stethoRealmVersion"
+    compile "io.realm:android-adapters:$rootProject.ext.realmAdapterVersion"
+    
     annotationProcessor "com.android.databinding:compiler:$rootProject.ext.databindingVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.daggerVersion"
+    annotationProcessor "dk.ilios:realmfieldnameshelper:$rootProject.ext.realmFieldNamesHelperVersion"
 
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
     releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakcanaryVersion"
