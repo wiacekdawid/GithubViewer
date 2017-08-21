@@ -2,7 +2,7 @@ package com.wiacek.githubviewer.di.modules;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.wiacek.githubviewer.api.ApiConstants;
+import com.wiacek.githubviewer.BuildConfig;
 import com.wiacek.githubviewer.api.GithubService;
 import com.wiacek.githubviewer.di.scopes.ApplicationScope;
 
@@ -37,7 +37,7 @@ public class NetModule {
     Retrofit provideRetrofit(Gson gson, OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(ApiConstants.GithubServiceUrl)
+                .baseUrl(BuildConfig.GITHUB_API_BASE_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();

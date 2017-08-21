@@ -1,20 +1,25 @@
 package com.wiacek.githubviewer.ui.base;
 
+import android.databinding.Bindable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
+import com.wiacek.githubviewer.BR;
 
 /**
  * Created by wiacek.dawid@gmail.com
  */
 
 public abstract class RecyclerViewViewModel extends ViewModel {
-    RecyclerView.LayoutManager layoutManager;
+    LinearLayoutManager layoutManager;
     private Parcelable savedLayoutManagerState;
 
     protected abstract RecyclerViewAdapter getAdapter();
-    protected abstract RecyclerView.LayoutManager getLayoutManager();
+    protected abstract LinearLayoutManager getLayoutManager();
+    protected abstract void loadMoreItems();
 
     public RecyclerViewViewModel(@Nullable State savedInstanceState) {
         super(savedInstanceState);
@@ -37,6 +42,18 @@ public abstract class RecyclerViewViewModel extends ViewModel {
         }
         recyclerView.setAdapter(getAdapter());
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                if(totalItemCount <= (lastVisibleItem + 2)){
+                    loadMoreItems();
+                }
+            }
+        });
     }
 
     protected static class RecyclerViewViewModelState extends State {

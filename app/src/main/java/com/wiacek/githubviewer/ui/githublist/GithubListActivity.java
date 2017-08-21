@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.wiacek.githubviewer.GithubViewerApplication;
 import com.wiacek.githubviewer.R;
-import com.wiacek.githubviewer.data.GithubReposRepository;
+import com.wiacek.githubviewer.data.local.util.GithubRepoDataHelper;
 import com.wiacek.githubviewer.databinding.ActivityGithubListBinding;
 import com.wiacek.githubviewer.di.components.GithubListActivityComponent;
 import com.wiacek.githubviewer.di.modules.GithubListActivityModule;
@@ -14,8 +14,7 @@ import com.wiacek.githubviewer.ui.base.ViewModel;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import io.realm.Realm;
 
 
 /**
@@ -25,8 +24,6 @@ import io.reactivex.schedulers.Schedulers;
 public class GithubListActivity extends AppCompatActivity {
     @Inject
     protected GithubListViewModel githubListViewModel;
-    @Inject
-    protected GithubReposRepository githubReposRepository;
 
     private static final String VIEW_MODEL_STATE = "viewModelState";
 
@@ -48,10 +45,14 @@ public class GithubListActivity extends AppCompatActivity {
 
         ActivityGithubListBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_github_list);
         binding.setViewModel(githubListViewModel);
+        githubListViewModel.loadMoreItems();
+    }
 
-        githubReposRepository.getGithubRepos("JakeWharton")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+    @Override
+    protected void onDestroy() {
+        if(githubListViewModel != null) {
+            githubListViewModel.detachFromView();
+        }
+        super.onDestroy();
     }
 }

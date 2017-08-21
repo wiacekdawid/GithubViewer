@@ -6,9 +6,21 @@
         type="com.wiacek.githubviewer.ui.githublist.GithubListViewModel" />
     </data>
 
-    <android.support.v7.widget.RecyclerView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        bind:recyclerViewViewModel="@{viewModel}"/>
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            bind:recyclerViewViewModel="@{viewModel}"/>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:visibility="@{viewModel.isLoading}"/>
+    </FrameLayout>
 
 </layout>

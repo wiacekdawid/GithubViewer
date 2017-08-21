@@ -3,9 +3,10 @@ package com.wiacek.githubviewer.di.modules;
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.wiacek.githubviewer.BuildConfig;
 import com.wiacek.githubviewer.api.GithubService;
-import com.wiacek.githubviewer.data.GithubReposRepository;
 import com.wiacek.githubviewer.data.local.util.GithubRepoDataHelper;
+import com.wiacek.githubviewer.data.remote.RemoteDataSource;
 import com.wiacek.githubviewer.di.scopes.ActivityScope;
 import com.wiacek.githubviewer.ui.base.ViewModel;
 import com.wiacek.githubviewer.ui.githublist.GithubListActivity;
@@ -36,14 +37,14 @@ public class GithubListActivityModule {
 
     @Provides
     @ActivityScope
-    GithubReposRepository provideGithubReposRepository(GithubService githubService) {
-        return new GithubReposRepository(githubService);
+    RemoteDataSource proviedRemoteDataSource(GithubService githubService) {
+        return new RemoteDataSource(githubService);
     }
 
     @Provides
     @ActivityScope
     GithubListAdapter proviedGithubListAdapter() {
-        return new GithubListAdapter(GithubRepoDataHelper.getReposByOwnerName(Realm.getDefaultInstance(), "JakeWharton"), true);
+        return new GithubListAdapter(GithubRepoDataHelper.getReposByOwnerName(Realm.getDefaultInstance(), BuildConfig.GITHUB_API_SEARCHED_USER), true);
     }
 
     @Provides
@@ -54,7 +55,9 @@ public class GithubListActivityModule {
 
     @Provides
     @ActivityScope
-    GithubListViewModel proviedGithubListViewModel(GithubListAdapter githubListAdapter, LinearLayoutManager linearLayoutManager) {
-        return new GithubListViewModel(githubListAdapter, linearLayoutManager, viewModelState);
+    GithubListViewModel proviedGithubListViewModel(RemoteDataSource remoteDataSource,
+                                                   GithubListAdapter githubListAdapter,
+                                                   LinearLayoutManager linearLayoutManager) {
+        return new GithubListViewModel(remoteDataSource, githubListAdapter, linearLayoutManager, viewModelState);
     }
 }

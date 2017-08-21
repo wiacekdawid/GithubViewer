@@ -24,4 +24,8 @@ public class GithubRepoDataHelper {
                 innerRealm -> innerRealm.insertOrUpdate(list)
         ));
     }
+
+    public static long getGithubRepoCount(Realm realm) {
+        return realm.where(GithubRepo.class).count();
+    }
 }
